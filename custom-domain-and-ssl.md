@@ -73,3 +73,93 @@
 ---
 
 ✅ Once your DNS is propagated, you should be able to access your website via your custom domain over HTTP.
+
+
+# 🌐 Add SSL to your website (http to https setup)
+
+### Install Dependencies
+
+- Install certbot
+
+<!-- `sudo yum install epel-release -y` -->
+```bash
+sudo yum install certbot python3-certbot-ngnix -y
+```
+
+- Stop Nginx
+
+```bash
+sudo systemctl stop nginx.service
+```
+
+- Generate Certificates
+
+```bash
+sudo certbot certonly --standalone -d yourdomain.com
+```
+
+- If it ask for email so give your email
+
+- Certificate files will be generated in
+
+```bash
+/etc/letsencrypt/live/yourdomain.com
+```
+
+- Above command will give you 2 paths, copy them and add them in config file
+
+- Update your nginx.conf file with the copied paths, located at:
+
+```bash
+/etc/nginx/nginx.conf
+```
+
+- Modify the file with the following configuration
+
+```nginx
+events {
+}
+
+http {
+    server {
+        listen 443 ssl http2;
+        server_name mywebsite.com www.mywebsite.com;
+
+        root /usr/share/nginx/path-to-your-website;
+        index index.html;
+
+        ssl_certificate /generated-path/fullchain.pem;
+        ssl_crtificate_key /generated-path/privkey.pem;
+
+        ssl_protocols TLSv1.2 TLSv1.3;
+        error_page 404 /404.html;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+
+        access_log /var/log/nginx/mywebsite.com.access.log;
+        error_log /var/log/nginx/mywebsite.com.error.log;
+    }
+}
+```
+- Test the Nginx config:
+
+```bash
+sudo nginx -t
+```
+
+- If everything is correct so start your nginx server
+
+```bash
+sudo systemctl start nginx
+```
+
+- Also check is your nginx is in running state or not
+
+```bash
+sudo systemctl status nginx
+```
+
+- If it is in running state so 
+### 💥 Boom, Your website is now live on custom domain and https secured SSL.
