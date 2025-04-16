@@ -1,0 +1,16 @@
+events {
+}
+
+http {
+    upstream backend_servers {
+        server your_first_server_ip:PORT;
+        server your_second_server_ip:PORT backup;
+    }
+
+    server {
+        # this is the main thing
+        location / {
+            proxy_pass http://backend_servers;
+        }
+    }
+}
