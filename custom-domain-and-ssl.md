@@ -83,7 +83,7 @@
 
 <!-- `sudo yum install epel-release -y` -->
 ```bash
-sudo yum install certbot python3-certbot-ngnix -y
+sudo yum install certbot python3-certbot-nginx -y
 ```
 
 - Stop Nginx
@@ -129,7 +129,7 @@ http {
         index index.html;
 
         ssl_certificate /generated-path/fullchain.pem;
-        ssl_crtificate_key /generated-path/privkey.pem;
+        ssl_certificate_key /generated-path/privkey.pem;
 
         ssl_protocols TLSv1.2 TLSv1.3;
         error_page 404 /404.html;
