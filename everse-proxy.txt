@@ -1,0 +1,11 @@
+events {
+}
+
+http {
+    server {
+        # this is the main thing
+        location / {
+            proxy_pass your backend server IP
+        }
+    }
+}
